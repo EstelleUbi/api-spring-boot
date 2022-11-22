@@ -1,0 +1,30 @@
+version: "3.1"
+
+volumes:
+  api-mariadb-db:
+    driver: local
+
+services:
+  api-mariadb:
+    image: mariadb
+    container_name: api-mariadb
+    environment:
+      - MARIADB_DATABASE=homedb
+      - MARIADB_USER=user
+      - MARIADB_PASSWORD=password
+      - MARIADB_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    volumes:
+      - api-mariadb-db:/mariadb
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: api-phpmyadmin
+    links:
+      - api-mariadb
+    ports:
+      - 8088:80
+    environment:
+      - PMA_HOST=api-mariadb
+      - PMA_PORT=3306
